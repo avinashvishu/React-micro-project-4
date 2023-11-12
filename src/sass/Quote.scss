@@ -1,0 +1,62 @@
+    .Quote-container{
+        height: 300px;
+        width: 300px;
+        background-color: #192A32;
+        padding: 20px;
+        text-align: center;
+        border-radius: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        h1{
+            color: #31C4BE;
+            font-family: DM Sans,"san-serif";
+            margin-bottom: 20px;
+            
+        }
+        .random-quote{
+            width: 80%;
+            height: 50%;
+            color: #F2B237;
+            overflow-y: scroll;
+            font-family:DM Sans,"san-serif";
+            p{
+                font-size: 25px;
+                text-align: center;
+            }
+            
+        }
+        .random-quote::-webkit-scrollbar {
+            display: none;
+          }
+          .quote-logo{
+            width: 35px;
+            height: 35px;
+            background-color: #31C4BE;
+            border-radius: 50%;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        .innerLogoSqr{
+            width: 15px;
+            height: 15px;
+            
+            .upperpart,.lowerpart{
+                width: 100%;
+                height: 50%;
+                display: flex;
+                div{
+                    width: 50%;
+                    height: 100%;
+                  
+                } 
+                .dark{
+                    background-color: #192A32;
+                   }
+            }
+      
+        }
+          }
+    }

@@ -1,0 +1,114 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  padding: 5vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Container {
+  width: 90vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.playzone {
+  width: 370px;
+  height: 90vh;
+  overflow: hidden;
+  background: #192a32;
+  border-radius: 43px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.playzone .logo {
+  margin-bottom: 10px;
+}
+.playzone .logo svg {
+  margin: 5px;
+}
+
+.pickPlayer {
+  width: 85%;
+  height: 150px;
+  color: #FFF;
+  padding: 20px 10px;
+  text-align: center;
+  background-color: #1f3540;
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.pickPlayer h2 {
+  font-size: 20px;
+  font-family: "DM Sans", sans-serif;
+}
+
+.select-btn {
+  margin-top: 20px;
+  height: 50px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  background-color: #192A32;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.select-btn .cross, .select-btn .circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48%;
+  height: 80%;
+  cursor: pointer;
+}
+.select-btn .circleActive, .select-btn .crossActive {
+  background-color: #D9D9D9;
+  border-radius: 10px;
+}
+
+.startgame {
+  width: 85%;
+  height: 200px;
+}
+.startgame .newGame, .startgame .comingSoon {
+  margin-top: 10px;
+  width: 100%;
+  height: 50px;
+  background-color: #F2B237;
+  border-radius: 5px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #192A32;
+  cursor: pointer;
+}
+.startgame .comingSoon {
+  background-color: #32C4C3;
+}
+
+.invite {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #192A32;
+  background-color: #F2B237;
+  border-radius: 5px;
+  width: 60%;
+  height: 30px;
+  cursor: pointer;
+}
+.invite h1 {
+  font-size: 14px;
+  font-family: "DM Sans", sans-serif;
+}/*# sourceMappingURL=App.css.map */
