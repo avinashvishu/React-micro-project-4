@@ -10,7 +10,7 @@ function App() {
    
     <div> <div className="Container">
       <Quote />
-      <Playzone />
+      {/* <Playzone /> */}
       <div className="filler" style={{height: "300px",width: "300px"}}></div>
       </div></div>
    
