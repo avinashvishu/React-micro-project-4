@@ -1,0 +1,36 @@
+.feature{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    .logo-board svg{
+        margin: 5px 5px 5px 0px;
+    }
+    .Turn{
+        margin-right: 15px;
+        height: 100%;
+        width: 30%;
+        background-color: #1F3540;
+        color: #A8BEC9;
+        font-family: 'DM sans',sans-serif;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        box-shadow: 0px 4px 4px 0px #00000040;
+        border-radius: 10px;
+        span:last-child{
+            font-size: 12px;
+        }
+       
+    }
+    .refresh{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+            width: 30px;
+            height: 30px;
+            background-color: #A7BDC8;
+            box-shadow: 0px 4px 4px 0px #00000040;
+            border-radius: 5px;
+        }
+} 

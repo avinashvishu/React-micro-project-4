@@ -1,10 +1,11 @@
 import React,{useEffect,useState} from 'react'
 import "./sass/Quote.css"
 import axios from 'axios';
+import { ToastContainer } from 'react-toastify';
 
 function Quote(){
 
-    const [data,setData]=useState({ "id": 1, "advice":"It is better to fail in originality than to succeed in imitation"})
+    const [data,setData]=useState(false)
 
     const MINUTE_MS = 1000;
     useEffect(() => {
@@ -24,8 +25,7 @@ function Quote(){
  
     return(
         <>
-        
-        <div className="Quote-container">
+        {data?(<div className="Quote-container">
               <h1>Quote #{data.id}</h1>
               <div className="random-quote"><p>“{data.advice}”</p></div>
               <div className="quote-logo">                <div className="innerLogoSqr">
@@ -33,7 +33,8 @@ function Quote(){
                     <div className="lowerpart"><div className='light'></div><div className='dark'></div></div>
                 </div>
               </div>
-        </div>
+        </div>):(<div className="Quote-container"></div>)}
+        
       
         </>
     )
