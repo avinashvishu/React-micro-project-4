@@ -93,6 +93,9 @@ body {
   color: #192A32;
   cursor: pointer;
 }
+.startgame .newGame {
+  cursor: pointer;
+}
 .startgame .comingSoon {
   background-color: #32C4C3;
 }

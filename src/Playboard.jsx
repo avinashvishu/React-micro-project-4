@@ -1,6 +1,6 @@
 import React from 'react'
 import "./sass/board.css"
-
+import { useState } from 'react'
 
 export const Playboard = () => {
   return (
@@ -44,14 +44,37 @@ export const Playboard = () => {
 </svg>
         </div>
       </div>
+      <div className="board">
+      <Board />
+      </div>
     </div>
   )
 }
-
-function board(){
-
+function Square(){
+  return(
+    <div className="square"></div>
+  )
+}
+function Board(){
+  const [squares,setsquare]=useState()
    return(
-    <div className="board-row"></div>
+    <div className="board-column">
+    <div className="board-row">
+      <Square />
+      <Square />
+      <Square />
+    </div>
+    <div className="board-row">
+      <Square />
+      <Square />
+      <Square />
+    </div>
+    <div className="board-row">
+      <Square />
+      <Square />
+      <Square />
+    </div>
+    </div>
    )
   
 }

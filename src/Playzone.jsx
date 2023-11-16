@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Invite } from "./Invite";
 
-function Playzone() {
+function Playzone({checkStart,togglecheck}) {
 
 
   return (
@@ -44,7 +44,7 @@ function Playzone() {
           <ChoosePlayer />
         </div>
         <div className="startgame">
-          <div className="newGame">
+          <div className="newGame" onClick={togglecheck}>
             <h2>NEW GAME (VS CPU)</h2>
           </div>
           <div className="comingSoon">

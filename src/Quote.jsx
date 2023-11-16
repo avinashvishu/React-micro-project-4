@@ -1,13 +1,27 @@
 import React,{useEffect,useState} from 'react'
 import "./sass/Quote.css"
 import axios from 'axios';
-import { ToastContainer } from 'react-toastify';
+import Loader from './assets/Loader';
+
 
 function Quote(){
 
-    const [data,setData]=useState(false)
+    const [data,setData]=useState()
+useEffect(()=>{
+  setTimeout(()=>{
+      axios.get('https://api.adviceslip.com/advice')
+      .then(function (response) {
+        // handle success
+        setData(response.data.slip)
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+    },2000)},[])
+    
 
-    const MINUTE_MS = 1000;
+    const MINUTE_MS = 30000;
     useEffect(() => {
         const interval = setInterval(() => {
             axios.get('https://api.adviceslip.com/advice')
@@ -33,7 +47,15 @@ function Quote(){
                     <div className="lowerpart"><div className='light'></div><div className='dark'></div></div>
                 </div>
               </div>
-        </div>):(<div className="Quote-container"></div>)}
+        </div>):(<div className="Quote-container">
+              <h2>Loading...</h2>
+              <Loader />
+              <div className="quote-logo">                <div className="innerLogoSqr">
+                    <div className="upperpart"><div className='dark'></div><div className='light'></div></div>
+                    <div className="lowerpart"><div className='light'></div><div className='dark'></div></div>
+                </div>
+              </div>
+        </div>)}
         
       
         </>
