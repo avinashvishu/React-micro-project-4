@@ -18,7 +18,7 @@ useEffect(()=>{
         // handle error
         console.log(error);
       })
-    },2000)},[])
+    },4000)},[])
     
 
     const MINUTE_MS = 30000;
@@ -39,7 +39,7 @@ useEffect(()=>{
  
     return(
         <>
-        {data?(<div className="Quote-container">
+        {data?(<div className="Quote-container" style={{userSelect: "none"}}>
               <h1>Quote #{data.id}</h1>
               <div className="random-quote"><p>“{data.advice}”</p></div>
               <div className="quote-logo">                <div className="innerLogoSqr">
@@ -47,7 +47,7 @@ useEffect(()=>{
                     <div className="lowerpart"><div className='light'></div><div className='dark'></div></div>
                 </div>
               </div>
-        </div>):(<div className="Quote-container">
+        </div>):(<div className="Quote-container" style={{userSelect: "none"}}>
               <h2>Loading...</h2>
               <Loader />
               <div className="quote-logo">                <div className="innerLogoSqr">

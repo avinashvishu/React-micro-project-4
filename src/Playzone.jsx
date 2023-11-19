@@ -2,8 +2,8 @@ import React from "react";
 import { useState } from "react";
 import { Invite } from "./Invite";
 
-function Playzone({checkStart,togglecheck}) {
-
+function Playzone({checkStart,togglecheck,toggle,togglePick}) {
+  
 
   return (
     <>
@@ -40,15 +40,15 @@ function Playzone({checkStart,togglecheck}) {
           </svg>
         </div>
         <div className="pickPlayer">
-          <h2>PICK PLAYER</h2>
-          <ChoosePlayer />
+          <h2 style={{userSelect: "none"}} >PICK PLAYER</h2>
+          <ChoosePlayer toggle={toggle} togglePick={togglePick}  />
         </div>
         <div className="startgame">
           <div className="newGame" onClick={togglecheck}>
-            <h2>NEW GAME (VS CPU)</h2>
+            <h2 style={{userSelect: "none"}} >NEW GAME (VS CPU)</h2>
           </div>
           <div className="comingSoon">
-            <h2>NEW GAME (VS HUMAN) Coming soon</h2>
+            <h2 style={{userSelect: "none"}} >NEW GAME (VS HUMAN) Coming soon</h2>
           </div>
         </div>
         <Invite />
@@ -57,16 +57,8 @@ function Playzone({checkStart,togglecheck}) {
   );
 }
 
-function ChoosePlayer() {
-  const [toggle, setToggle] = useState(true);
-  function togglePick(userchoice) {
-    if (userchoice == "circle") {
-      setToggle(true);
-    } else {
-      setToggle(false);
-    }
-    console.log(userchoice);
-  }
+function ChoosePlayer({toggle,togglePick}) {
+  
   return (
     <>
       {toggle ? (

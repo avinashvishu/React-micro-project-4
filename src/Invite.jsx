@@ -7,7 +7,7 @@ export const Invite = () => {
   return (
     <>
     <div className="invite" onClick={notify}>
-    <h1>Invite your friend</h1>
+    <h1 style={{userSelect: "none"}} >Invite your friend</h1>
   </div>
   <ToastContainer
 position="top-right"

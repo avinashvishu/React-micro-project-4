@@ -23,6 +23,9 @@
 .feature .Turn span:last-child {
   font-size: 12px;
 }
+.feature .Turn span:first-child {
+  font-size: 20px;
+}
 .feature .refresh {
   display: flex;
   justify-content: center;
@@ -32,6 +35,7 @@
   background-color: #A7BDC8;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.2509803922);
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .board {
@@ -58,4 +62,12 @@
   background-color: #1F3540;
   border-radius: 10px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.2509803922);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.square svg {
+  height: 50%;
+  width: 50%;
 }/*# sourceMappingURL=board.css.map */
