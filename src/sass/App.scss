@@ -9,13 +9,74 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
   .logo{
     margin-bottom: 10px;
    svg{
     margin: 5px;
    }
   }
-
+  .message{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    .messageBox{
+      width: 100%;
+      height: 30%;
+      padding: 30px 0px;
+      display:flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-content: center;
+      text-align: center;
+      gap: 10px;
+      justify-content: space-evenly;
+      background-color: #192A32;
+      h3{
+         color: #ACC2CD;
+         font-family: 'DM Sans',sans-serif;
+         font-size: 15px;
+      }
+      .statement{
+        display: flex;
+        gap:10px;
+        justify-content: center;
+        span{
+          color: #F2B237;
+          font-family: 'DM Sans',sans-serif;
+          font-size: 25px;
+          font-style: normal;
+          font-weight: 800;
+          line-height: normal;
+        }
+      }
+      .button{
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+      button{   
+        border: none;
+        font-family: 'DM Sans',sans-serif;
+        width: 100px;
+        height: 30px;
+        font-size: 12px;
+        font-weight: 800;
+        border-radius: 10px;
+        cursor: pointer;
+      } 
+      .quit{
+        background-color: #F2B237;
+      }
+      .playAgain{
+        background-color: #31C4BE;
+      }
+      }
+    }
+  }
 }
 @mixin scrollbars(
   $size: 10px,

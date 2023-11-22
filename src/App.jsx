@@ -7,18 +7,23 @@ import { useState } from "react";
 
 function App() {
   const[checkstart,setStart]=useState(true)
+  
   const handleClick=()=>{
-    setStart(!setStart)
+    setStart(!checkstart)
   }
   const [toggle, setToggle] = useState(true);
-  const [player,setPlayer] = useState("O")
+  const [player,setPlayer] = useState("O");
+  const [playerChoice,setplayerChoice]= useState("O")
+
   function togglePick(userchoice) {
     if (userchoice == "circle") {
       setToggle(true);
-      setPlayer("O")
+      setPlayer("O");
+      setplayerChoice("O")
     } else {
       setToggle(false);
       setPlayer("X")
+      setplayerChoice("X")
     }
   }
   return (
@@ -26,7 +31,7 @@ function App() {
    
     <div> <div className="Container">
       <Quote />
-      {checkstart?<Playzone checkStart={checkstart} togglecheck={()=>{handleClick()}} toggle={toggle} togglePick={togglePick}/>:<Playboard player={player} setPlayer={setPlayer} />  }   
+      {checkstart?<Playzone togglecheck={()=>{handleClick()}} toggle={toggle} togglePick={togglePick}/>:<Playboard playerChoice={playerChoice} player={player} setPlayer={setPlayer} />}   
       <div className="filler" style={{height: "300px",width: "300px"}}>
       </div>
       </div>

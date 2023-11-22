@@ -74,3 +74,37 @@
             }
 }
 
+.score-board{
+    
+    height: 60px;
+    width: 300px;
+    display: flex;
+    justify-content: space-between;
+    div{
+        width: 90px;
+        color: #1E1E1E;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family: 'DM Sans',sans-serif;
+        font-size: 10px;
+        .score{
+            font-size: 16px;
+        }
+        
+    }
+    .YouWin{
+          background-color: #31C4BE;
+          
+        }
+    .BothTie{
+            background-color: #A8BEC9;
+            
+          }
+    .PcWin{
+        background-color: #F2B237;
+        
+    }      
+}

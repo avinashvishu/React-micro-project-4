@@ -1,15 +1,29 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,useState } from 'react'
 import "./sass/board.css"
-import { useState } from 'react'
+import { layer } from '@fortawesome/fontawesome-svg-core'
 
-export const Playboard = ({player,setPlayer}) => {
+export const Playboard = ({player,setPlayer,playerChoice}) => {
   const [squareSign,setsquareSign]=useState(Array(9).fill(null))
   const [squares,setsquares]=useState(Array(9).fill(null))
   const [isRefresh,setRefresh]=useState(false)
-  function refresh(){
+  const [disabled,setDisabled] = useState(true)
+  const [isMessage,setMessage] = useState(false)
+  const [winner,setWinner]=useState(null)
+  const [iftie,setTie]=useState(false)
 
+  function refresh(){
+    setMessage(true)
+   
+  }
+
+  function playAgain(){
     setsquareSign(Array(9).fill(null))
     setsquares(Array(9).fill(null))
+    setDisabled(true)
+    setMessage(false)
+    setWinner(null)
+    setTie(false)
+    playerChoice=="X"?setPlayer("X"):setPlayer("O")
   }
   return (
     <div className="playzone">
@@ -54,59 +68,56 @@ export const Playboard = ({player,setPlayer}) => {
        
       </div>
       <div className="board">
-      <Board player={player} setPlayer={setPlayer} squareSign={squareSign} setsquareSign={setsquareSign} squares={squares} setsquares={setsquares} setRefresh={setRefresh} />
+      <Board player={player} setPlayer={setPlayer} squareSign={squareSign} setsquareSign={setsquareSign} squares={squares} setsquares={setsquares} setRefresh={setRefresh} isRefresh={isRefresh} disabled={disabled} setWinner={setWinner} setTie={setTie} setDisabled={setDisabled}/>
       </div>
-    </div>
-  )
-}
-function Square({value,onsquareClicked}){
-  
-  return(
-    <div className="square" onClick={onsquareClicked} >{value}</div>
-  )
-}
 
-function Board({player,setPlayer,squareSign,setsquareSign,squares,setsquares,setRefresh}){
-  
-  function squareClicked(i){
-    if(player=="X"){let realsqr= squares.slice();
-      realsqr[i]="X"
-      setsquares(realsqr)
-      setPlayer("O")}
-      else{
-        let realsqr= squares.slice();
-          realsqr[i]="O"
-          setsquares(realsqr)
-          setPlayer("X")
-      }
+      {isRefresh?<div className="score-board">
+        <div className='YouWin'><h3>{playerChoice=="X"?"X":"O"} (YOU)</h3><div className="score">0</div></div>
+        <div className='BothTie'><h3>TIES</h3><div className="score">0</div></div>
+        <div className='PcWin'><h3>{playerChoice=="O"?"X":"O"} (CPU)</h3><div className="score">0</div></div>
+      </div>:null}
 
-      if (squares[i] || calculateWiner(squares)) {
-        let winner= calculateWiner(squares);
-        console.log(winner)
-        return;
-      }
 
-      let nextSquare=squareSign.slice();
-    if(player=="X"){ 
-      nextSquare[i]= <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="23"
-        height="24"
-        viewBox="0 0 23 24"
-        fill="none"
-      >
-        <path
-          d="M19.4375 4.28125L4 19.7188M4 4.28125L19.4375 19.7188"
-          stroke="#32C4C3"
-          strokeWidth="7"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>;
-      setsquareSign(nextSquare)
-      
-    }else{
-      nextSquare[i]= <svg
+
+
+      {isMessage?<div className='message'>
+        <div className="messageBox">
+          <div className="statement"><span>Do you want to quit ?</span></div>
+          <div className="button">           
+            <button className='playAgain' onClick={()=>{playAgain()}} >PLAY AGAIN</button>
+            <button className='quit'>QUIT</button>
+          </div>
+        </div>
+      </div>:null}
+      {iftie?<div className='message'>
+        <div className="messageBox">
+          <div className="statement"><span>The Match is Tie <br /> Try Again?</span></div>
+          <div className="button">           
+            <button className='playAgain' onClick={()=>{playAgain()}} >PLAY AGAIN</button>
+            <button className='quit'>QUIT</button>
+          </div>
+        </div>
+      </div>:null}
+      {winner?winner==playerChoice?
+      <div className='message'>
+        <div className="messageBox">
+          <h3>YOU WON!</h3>
+          <div className="statement">
+            {winner=="X"?<svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="23"
+            height="24"
+            viewBox="0 0 23 24"
+            fill="none"
+          >
+            <path
+              d="M19.4375 4.28125L4 19.7188M4 4.28125L19.4375 19.7188"
+              stroke="#32C4C3"
+              strokeWidth="7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>:<svg
             xmlns="http://www.w3.org/2000/svg"
             width="26"
             height="26"
@@ -119,34 +130,327 @@ function Board({player,setPlayer,squareSign,setsquareSign,squares,setsquares,set
               stroke="#F7B336"
               strokeWidth="1.5"
             />
-          </svg>
-          setsquareSign(nextSquare)
-          
-    }
+          </svg>}
+          <span>TAKED THE ROUND</span></div>
+          <div className="button">
+            <button className='quit'>QUIT</button>
+            <button className='playAgain'onClick={()=>{playAgain()}}  >NEXT ROUND</button>
+          </div>
+        </div>
+      </div>:<div className='message'>
+        <div className="messageBox">
+          <h3>YOU LOST!</h3>
+          <div className="statement">
+          {winner=="X"?<svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="23"
+            height="24"
+            viewBox="0 0 23 24"
+            fill="none"
+          >
+            <path
+              d="M19.4375 4.28125L4 19.7188M4 4.28125L19.4375 19.7188"
+              stroke="#32C4C3"
+              strokeWidth="7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>:<svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="26"
+            height="26"
+            viewBox="0 0 26 26"
+            fill="none"
+          >
+            <path
+              d="M7.69324 18.0255C9.02609 19.3584 10.8338 20.1071 12.7188 20.1071C14.6037 20.1071 16.4114 19.3584 17.7443 18.0255C19.0771 16.6927 19.8259 14.8849 19.8259 13C19.8259 11.1151 19.0771 9.30734 17.7443 7.97449C16.4114 6.64164 14.6037 5.89286 12.7188 5.89286C10.8338 5.89286 9.02609 6.64164 7.69324 7.97449C6.36039 9.30734 5.61161 11.1151 5.61161 13C5.61161 14.8849 6.36039 16.6927 7.69324 18.0255ZM21.0273 4.6915C23.2308 6.89505 24.4688 9.88371 24.4688 13C24.4688 16.1163 23.2308 19.105 21.0273 21.3085C18.8237 23.5121 15.835 24.75 12.7188 24.75C9.60246 24.75 6.6138 23.5121 4.41024 21.3085C2.20669 19.105 0.96875 16.1163 0.96875 13C0.96875 9.88371 2.20669 6.89505 4.41024 4.6915C6.6138 2.48794 9.60246 1.25 12.7188 1.25C15.835 1.25 18.8237 2.48794 21.0273 4.6915Z"
+              fill="#F7B336"
+              stroke="#F7B336"
+              strokeWidth="1.5"
+            />
+          </svg>}<span>TAKED THE ROUND</span></div>
+          <div className="button">
+            <button className='quit'>QUIT</button>
+            <button className='playAgain'onClick={()=>{playAgain()}}  >NEXT ROUND</button>
+          </div>
+        </div>
+      </div>:null}
+    </div>
+  )
+}
 
 
-      setRefresh(true)
-      
+//                                  SQUARE
+
+
+
+function Square({value,onsquareClicked}){
+  
+  return(
+    <div className="square" onClick={onsquareClicked}>{value}</div>
+  )
+}
+
+
+
+
+
+//                                    BOARD
+
+
+
+
+
+
+function Board({player,setPlayer,squareSign,setsquareSign,squares,setsquares,setRefresh,isRefresh,disabled,setDisabled,setWinner,setTie}){
+
+  const [playerChoice]=useState(player)
+  const [pcChoice]=useState(player=="X"?"O":"X")
+  const [autoPlay,toggleAutoplay]=useState(false)
+  
+  
+  function squareClicked(i){
+    if(squares[i]===null){
+    if (calculateWiner(squares)) {
+      let gameWinner= calculateWiner(squares);
+      console.log(gameWinner,' from userPlay')
+      return;
+}else{
+      if(playerChoice=="X"){
+        const tempsqr=squares.slice();
+        tempsqr[i]="X";
+        setsquares(tempsqr);
+        const xSignsqr=squareSign.slice();
+        xSignsqr[i]= <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="23"
+          height="24"
+          viewBox="0 0 23 24"
+          fill="none"
+        >
+          <path
+            d="M19.4375 4.28125L4 19.7188M4 4.28125L19.4375 19.7188"
+            stroke="#32C4C3"
+            strokeWidth="7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        setsquareSign(xSignsqr)
+      }else{
+        const tempsqr=squares.slice();
+        tempsqr[i]="O";
+        setsquares(tempsqr);
+        const xSignsqr=squareSign.slice();
+        xSignsqr[i]=  <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="26"
+        height="26"
+        viewBox="0 0 26 26"
+        fill="none"
+      >
+        <path
+          d="M7.69324 18.0255C9.02609 19.3584 10.8338 20.1071 12.7188 20.1071C14.6037 20.1071 16.4114 19.3584 17.7443 18.0255C19.0771 16.6927 19.8259 14.8849 19.8259 13C19.8259 11.1151 19.0771 9.30734 17.7443 7.97449C16.4114 6.64164 14.6037 5.89286 12.7188 5.89286C10.8338 5.89286 9.02609 6.64164 7.69324 7.97449C6.36039 9.30734 5.61161 11.1151 5.61161 13C5.61161 14.8849 6.36039 16.6927 7.69324 18.0255ZM21.0273 4.6915C23.2308 6.89505 24.4688 9.88371 24.4688 13C24.4688 16.1163 23.2308 19.105 21.0273 21.3085C18.8237 23.5121 15.835 24.75 12.7188 24.75C9.60246 24.75 6.6138 23.5121 4.41024 21.3085C2.20669 19.105 0.96875 16.1163 0.96875 13C0.96875 9.88371 2.20669 6.89505 4.41024 4.6915C6.6138 2.48794 9.60246 1.25 12.7188 1.25C15.835 1.25 18.8237 2.48794 21.0273 4.6915Z"
+          fill="#F7B336"
+          stroke="#F7B336"
+          strokeWidth="1.5"
+        />
+      </svg>
+        setsquareSign(xSignsqr)
+      }
      
+      player=="X"?setPlayer("O"):setPlayer("X")
+      toggleAutoplay(!autoPlay)
+      setRefresh(true)
+    }
+  }
   }
 
+
+
+ function pcPlay(idy){
+  if (calculateWiner(squares)) {
+    let gameWinner= calculateWiner(squares);
+    // gameWinner==="X"?setWinner("X"):setWinner("O")
+    console.log(gameWinner,' from pcPlay')
+    return;
+}else{
+  console.log(idy,"is index")
+  if(pcChoice=="X"){
+    const tempsqr=squares.slice();
+        tempsqr[idy]="X";
+        setsquares(tempsqr);
+        const xSignsqr=squareSign.slice();
+        xSignsqr[idy]= <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="23"
+          height="24"
+          viewBox="0 0 23 24"
+          fill="none"
+        >
+          <path
+            d="M19.4375 4.28125L4 19.7188M4 4.28125L19.4375 19.7188"
+            stroke="#32C4C3"
+            strokeWidth="7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        setsquareSign(xSignsqr)
+  }else{
+    const tempsqr=squares.slice();
+    tempsqr[idy]="O";
+    setsquares(tempsqr);
+    const xSignsqr=squareSign.slice();
+    xSignsqr[idy]=  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="26"
+    height="26"
+    viewBox="0 0 26 26"
+    fill="none"
+  >
+    <path
+      d="M7.69324 18.0255C9.02609 19.3584 10.8338 20.1071 12.7188 20.1071C14.6037 20.1071 16.4114 19.3584 17.7443 18.0255C19.0771 16.6927 19.8259 14.8849 19.8259 13C19.8259 11.1151 19.0771 9.30734 17.7443 7.97449C16.4114 6.64164 14.6037 5.89286 12.7188 5.89286C10.8338 5.89286 9.02609 6.64164 7.69324 7.97449C6.36039 9.30734 5.61161 11.1151 5.61161 13C5.61161 14.8849 6.36039 16.6927 7.69324 18.0255ZM21.0273 4.6915C23.2308 6.89505 24.4688 9.88371 24.4688 13C24.4688 16.1163 23.2308 19.105 21.0273 21.3085C18.8237 23.5121 15.835 24.75 12.7188 24.75C9.60246 24.75 6.6138 23.5121 4.41024 21.3085C2.20669 19.105 0.96875 16.1163 0.96875 13C0.96875 9.88371 2.20669 6.89505 4.41024 4.6915C6.6138 2.48794 9.60246 1.25 12.7188 1.25C15.835 1.25 18.8237 2.48794 21.0273 4.6915Z"
+      fill="#F7B336"
+      stroke="#F7B336"
+      strokeWidth="1.5"
+    />
+  </svg>
+    setsquareSign(xSignsqr)
+  }
+  player=="X"?setPlayer("O"):setPlayer("X")
+  setDisabled(true)
+}
+ }
+
+
+
+  
+
+
+
+
+useEffect(()=>{
+  if (calculateWiner(squares)) {
+    let gameWinner= calculateWiner(squares);
+    console.log(gameWinner,' from useEffect')
+    gameWinner==="X"?setWinner("X"):setWinner("O")
+    return;
+}
+},[squares])
+
+ useEffect(()=>{
+  if(isRefresh){
+    setDisabled(false)
+    let idy=checkPcwin()
+    if(idy!==9){setTimeout(()=>{pcPlay(idy);},1000)}
+    else{
+      setTie(true)
+      console.log('its a tie')
+    }
+    
+  }
+},[autoPlay])
+
+  function checkPcwin(){
+    const winline = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6]
+    ];
+    for (var j = 0; j < winline.length; j++) {
+      const [a, b, c] = winline[j];
+      let temp=[squares[a],squares[b],squares[c]]
+    if(temp.filter((pc)=>{return pc==pcChoice}).length==2 && temp.filter((uc)=>{return uc==playerChoice}).length==0)
+    {
+      let nullindex=temp.indexOf(null)
+      console.log(temp,'from pc dec')
+      switch(nullindex)
+      {
+        case 0:
+          return a
+        case 1:
+          return b;
+        case 2:
+          return c;
+        default:
+            break;
+      }
+    }
+    }
+   
+    for (var i = 0; i < winline.length; i++) {
+      const [a, b, c] = winline[i];
+      let temp=[squares[a],squares[b],squares[c]]
+      console.log(temp)
+      if (temp.filter((uc)=>{return uc==playerChoice}).length==2 && temp.filter((pc)=>{return pc==pcChoice}).length==0) {
+        let nullindex=temp.indexOf(null)
+        console.log(temp,'from I dec')
+        switch(nullindex)
+        {
+          case 0:
+            return a
+          case 1:
+            return b;
+          case 2:
+            return c;
+        }
+       
+      }
+            
+     
+    }
+
+    if(squares.filter((isNull)=>{return isNull===null})[0]===null){
+    //  let randomval= reccursion();
+    let randomval=Math.floor(Math.random()*9);
+     console.log('randomval is ', randomval)
+     while (squares[randomval]!==null) {
+
+      randomval=Math.floor(Math.random()*9);
+
+    }
+    console.log(randomval,"returned for while loop")
+    return randomval;
+
+    //  if(randomval===undefined) {
+    //   do{
+    //     randomval=reccursion()
+    // }while(randomval!==undefined);
+    //   console.log(randomval,'is randomval')
+    // }
+      
+    //   return randomval;
+    // 
+  }else{
+      console.log('is null')
+      return 9;
+    }
+  }
+
+ 
 
    return(
     <div className="board-column">
     <div className="board-row">
-      <Square value={squareSign[0]} onsquareClicked={()=>squareClicked(0)}/>
-      <Square value={squareSign[1]} onsquareClicked={()=>squareClicked(1)}/>
-      <Square value={squareSign[2]} onsquareClicked={()=>squareClicked(2)}/>
+      <Square value={squareSign[0]} onsquareClicked={disabled?()=>squareClicked(0):null}/>
+      <Square value={squareSign[1]} onsquareClicked={disabled?()=>squareClicked(1):null}/>
+      <Square value={squareSign[2]} onsquareClicked={disabled?()=>squareClicked(2):null}/>
     </div>
     <div className="board-row">
-      <Square value={squareSign[3]} onsquareClicked={()=>squareClicked(3)}/>
-      <Square value={squareSign[4]} onsquareClicked={()=>squareClicked(4)}/>
-      <Square value={squareSign[5]} onsquareClicked={()=>squareClicked(5)}/>
+      <Square value={squareSign[3]} onsquareClicked={disabled?()=>squareClicked(3):null}/>
+      <Square value={squareSign[4]} onsquareClicked={disabled?()=>squareClicked(4):null}/>
+      <Square value={squareSign[5]} onsquareClicked={disabled?()=>squareClicked(5):null}/>
     </div>
     <div className="board-row">
-      <Square value={squareSign[6]} onsquareClicked={()=>squareClicked(6)}/>
-      <Square value={squareSign[7]} onsquareClicked={()=>squareClicked(7)}/>
-      <Square value={squareSign[8]} onsquareClicked={()=>squareClicked(8)}/>
+      <Square value={squareSign[6]} onsquareClicked={disabled?()=>squareClicked(6):null}/>
+      <Square value={squareSign[7]} onsquareClicked={disabled?()=>squareClicked(7):null}/>
+      <Square value={squareSign[8]} onsquareClicked={disabled?()=>squareClicked(8):null}/>
     </div>
     </div>
    )
@@ -173,6 +477,9 @@ function calculateWiner(square) {
   }
   return null;
 }
+
+
+
 // X logo
 // {/* <svg
 //             xmlns="http://www.w3.org/2000/svg"
@@ -205,3 +512,207 @@ function calculateWiner(square) {
           //     strokeWidth="1.5"
           //   />
           // </svg>
+
+
+
+
+          //             recursion logic →↓  
+          
+          
+        //if(realsqr.filter((isNull)=>{return isNull==null})[0]===null){
+        //   (function reccursion(){
+        //     let random=Math.floor(Math.random()*9);
+        //       console.log(squares[random],random)
+        //     if(realsqr[random]===null){
+        //       realsqr[random]=pcPlayer;
+        //       setsquares(realsqr)
+        //       if(pcPlayer=="X"){
+        //         let nextSquare=squareSign.slice();
+        //   if (squares[random] || calculateWiner(squares)) {
+        //     let gameWinner= calculateWiner(squares);
+        //     console.log(gameWinner)
+        //     return;
+        //   }else{
+        //     nextSquare[random]= <svg
+        //     xmlns="http://www.w3.org/2000/svg"
+        //     width="23"
+        //     height="24"
+        //     viewBox="0 0 23 24"
+        //     fill="none"
+        //   >
+        //     <path
+        //       d="M19.4375 4.28125L4 19.7188M4 4.28125L19.4375 19.7188"
+        //       stroke="#32C4C3"
+        //       strokeWidth="7"
+        //       strokeLinecap="round"
+        //       strokeLinejoin="round"
+        //     />
+        //   </svg>;
+        //   setsquareSign(nextSquare)
+        //   }
+        // }else{
+        //   let nextSquare=squareSign.slice();
+        //       if (squares[random] || calculateWiner(squares)) {
+        //         let gameWinner= calculateWiner(squares);
+        //         console.log(gameWinner)
+        //         return;
+        //       }else{
+        //         nextSquare[random]= <svg
+        //               xmlns="http://www.w3.org/2000/svg"
+        //               width="26"
+        //               height="26"
+        //               viewBox="0 0 26 26"
+        //               fill="none"
+        //             >
+        //               <path
+        //                 d="M7.69324 18.0255C9.02609 19.3584 10.8338 20.1071 12.7188 20.1071C14.6037 20.1071 16.4114 19.3584 17.7443 18.0255C19.0771 16.6927 19.8259 14.8849 19.8259 13C19.8259 11.1151 19.0771 9.30734 17.7443 7.97449C16.4114 6.64164 14.6037 5.89286 12.7188 5.89286C10.8338 5.89286 9.02609 6.64164 7.69324 7.97449C6.36039 9.30734 5.61161 11.1151 5.61161 13C5.61161 14.8849 6.36039 16.6927 7.69324 18.0255ZM21.0273 4.6915C23.2308 6.89505 24.4688 9.88371 24.4688 13C24.4688 16.1163 23.2308 19.105 21.0273 21.3085C18.8237 23.5121 15.835 24.75 12.7188 24.75C9.60246 24.75 6.6138 23.5121 4.41024 21.3085C2.20669 19.105 0.96875 16.1163 0.96875 13C0.96875 9.88371 2.20669 6.89505 4.41024 4.6915C6.6138 2.48794 9.60246 1.25 12.7188 1.25C15.835 1.25 18.8237 2.48794 21.0273 4.6915Z"
+        //                 fill="#F7B336"
+        //                 stroke="#F7B336"
+        //                 strokeWidth="1.5"
+        //               />
+        //             </svg>
+        //             setsquareSign(nextSquare)
+        // }
+        //       }
+        //     }else{
+        //       reccursion();
+        //     }
+          
+        //   })();
+// }
+
+
+
+
+
+
+
+// function squareClicked(i){
+//   let realsqr= squares.slice();
+//   console.log(player," is player inside squareClicked function")
+//   let pcChoice;
+//   if(player==playerChoice){
+//     if(player=="X")
+//     {
+//     realsqr[i]="X"
+//     setsquares(realsqr)
+//     setPlayer("O")
+//     pcChoice="O"
+//     console.log(playerChoice," if X is selected")
+//     let nextSquare=squareSign.slice();
+//     if (squares[i] || calculateWiner(squares)) {
+//       let gameWinner= calculateWiner(squares);
+//       console.log(gameWinner)
+//       return;
+//     }else{
+//       nextSquare[i]= <svg
+//       xmlns="http://www.w3.org/2000/svg"
+//       width="23"
+//       height="24"
+//       viewBox="0 0 23 24"
+//       fill="none"
+//     >
+//       <path
+//         d="M19.4375 4.28125L4 19.7188M4 4.28125L19.4375 19.7188"
+//         stroke="#32C4C3"
+//         strokeWidth="7"
+//         strokeLinecap="round"
+//         strokeLinejoin="round"
+//       />
+//     </svg>;
+//     setsquareSign(nextSquare)
+//     }
+//   }
+//     else{
+//         pcChoice="X"
+//         realsqr[i]="O"
+//         setsquares(realsqr)
+//         setPlayer("X")
+//         console.log(player," if O is selected")
+//         let nextSquare=squareSign.slice();
+//         if (squares[i] || calculateWiner(squares)) {
+//           let gameWinner= calculateWiner(squares);
+//           console.log(gameWinner)
+//           return;
+//         }else{
+//           nextSquare[i]= <svg
+//                 xmlns="http://www.w3.org/2000/svg"
+//                 width="26"
+//                 height="26"
+//                 viewBox="0 0 26 26"
+//                 fill="none"
+//               >
+//                 <path
+//                   d="M7.69324 18.0255C9.02609 19.3584 10.8338 20.1071 12.7188 20.1071C14.6037 20.1071 16.4114 19.3584 17.7443 18.0255C19.0771 16.6927 19.8259 14.8849 19.8259 13C19.8259 11.1151 19.0771 9.30734 17.7443 7.97449C16.4114 6.64164 14.6037 5.89286 12.7188 5.89286C10.8338 5.89286 9.02609 6.64164 7.69324 7.97449C6.36039 9.30734 5.61161 11.1151 5.61161 13C5.61161 14.8849 6.36039 16.6927 7.69324 18.0255ZM21.0273 4.6915C23.2308 6.89505 24.4688 9.88371 24.4688 13C24.4688 16.1163 23.2308 19.105 21.0273 21.3085C18.8237 23.5121 15.835 24.75 12.7188 24.75C9.60246 24.75 6.6138 23.5121 4.41024 21.3085C2.20669 19.105 0.96875 16.1163 0.96875 13C0.96875 9.88371 2.20669 6.89505 4.41024 4.6915C6.6138 2.48794 9.60246 1.25 12.7188 1.25C15.835 1.25 18.8237 2.48794 21.0273 4.6915Z"
+//                   fill="#F7B336"
+//                   stroke="#F7B336"
+//                   strokeWidth="1.5"
+//                 />
+//               </svg>
+//               setsquareSign(nextSquare)
+    
+//         }
+//     }
+//   }
+
+//     setRefresh(true)
+//     setTimeout(()=>{pcPlay(realsqr,pcChoice)},3000) 
+//     console.log(playerChoice,"player choice")
+// }
+  
+// // PC player function
+
+//     function pcPlay(realsqr,pcChoice){
+//           console.log(pcChoice,"is pc choice")
+//           // console.log(realsqr,"realsrq")
+//           // console.log(squares,"squares")
+//           // // pcPlayer=="X"?setPlayer("O"):setPlayer("X");
+//           // if(realsqr.filter((isNull)=>{return isNull==null})[0]===null){
+//           //   (function recursion(){
+
+//           //     console.log("recursion")
+//           //   })();
+//           // }else{
+//           //   console.log("no null value present")
+//           // }
+
+// }
+
+
+// function reccursion(){
+//   let random=Math.floor(Math.random()*9);
+//   if(squares[random]===null){
+//     console.log(random,'random value generated');
+//     switch(random){
+//       case 0:
+//         console.log('0 is returned')
+//         return 0
+//       case 1:
+//         console.log('1 is returned')
+//         return 1
+//       case 2:
+//         console.log('2 is returned')
+//         return 2
+//       case 3:
+//         console.log('3 is returned')
+//         return 3
+//       case 4:
+//         console.log('4 is returned')
+//         return 4
+//       case 5:
+//         console.log('5 is returned')
+//         return 5
+//       case 6:
+//         console.log('6 is returned')
+//         return 6
+//       case 7:
+//         console.log('7 is returned')
+//         return 7
+//       case 8:
+//         console.log('8 is returned')
+//         return 8
+//     }
+//   }else{
+//     reccursion();
+//   }
+// }
