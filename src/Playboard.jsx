@@ -2,7 +2,7 @@ import React, { useEffect,useState } from 'react'
 import "./sass/board.css"
 import { layer } from '@fortawesome/fontawesome-svg-core'
 
-export const Playboard = ({player,setPlayer,playerChoice}) => {
+export const Playboard = ({player,setPlayer,playerChoice,score,setScore,setStart}) => {
   const [squareSign,setsquareSign]=useState(Array(9).fill(null))
   const [squares,setsquares]=useState(Array(9).fill(null))
   const [isRefresh,setRefresh]=useState(false)
@@ -10,12 +10,45 @@ export const Playboard = ({player,setPlayer,playerChoice}) => {
   const [isMessage,setMessage] = useState(false)
   const [winner,setWinner]=useState(null)
   const [iftie,setTie]=useState(false)
+  
+
+
+  useEffect(()=>{setStart(JSON.parse(localStorage.getItem("started")))},[])
+   
+  useEffect(
+    ()=>{
+      let matchfinal = JSON.parse(localStorage.getItem("scores"))
+      if(winner){winner==playerChoice?matchfinal.user=matchfinal.user+1:matchfinal.pc=matchfinal.pc+1;}
+      let value = JSON.stringify(matchfinal);
+      localStorage.setItem("scores",value);
+      setScore(matchfinal)
+    },[winner]
+  )
 
   function refresh(){
     setMessage(true)
    
   }
+  
+  function quite(){
+    setScore({
+      user:0,
+      pc:0,
+      tie:0
+    })
+    let scoreValue=JSON.stringify({
+      user:0,
+      pc:0,
+      tie:0
+    })
+    localStorage.setItem("scores",scoreValue)
+    playAgain()
+    setRefresh(false)
+    localStorage.removeItem("started")
+   
+  }
 
+  console.log(score,"from board")
   function playAgain(){
     setsquareSign(Array(9).fill(null))
     setsquares(Array(9).fill(null))
@@ -68,13 +101,13 @@ export const Playboard = ({player,setPlayer,playerChoice}) => {
        
       </div>
       <div className="board">
-      <Board player={player} setPlayer={setPlayer} squareSign={squareSign} setsquareSign={setsquareSign} squares={squares} setsquares={setsquares} setRefresh={setRefresh} isRefresh={isRefresh} disabled={disabled} setWinner={setWinner} setTie={setTie} setDisabled={setDisabled}/>
+      <Board player={player} setPlayer={setPlayer} squareSign={squareSign} setsquareSign={setsquareSign} squares={squares} setsquares={setsquares} setRefresh={setRefresh} isRefresh={isRefresh} disabled={disabled} setWinner={setWinner} setTie={setTie} setDisabled={setDisabled} score={score} setScore={setScore} />
       </div>
 
       {isRefresh?<div className="score-board">
-        <div className='YouWin'><h3>{playerChoice=="X"?"X":"O"} (YOU)</h3><div className="score">0</div></div>
-        <div className='BothTie'><h3>TIES</h3><div className="score">0</div></div>
-        <div className='PcWin'><h3>{playerChoice=="O"?"X":"O"} (CPU)</h3><div className="score">0</div></div>
+        <div className='YouWin'><h3>{playerChoice=="X"?"X":"O"} (YOU)</h3><div className="score">{score.user}</div></div>
+        <div className='BothTie'><h3>TIES</h3><div className="score">{score.tie}</div></div>
+        <div className='PcWin'><h3>{playerChoice=="O"?"X":"O"} (CPU)</h3><div className="score">{score.pc}</div></div>
       </div>:null}
 
 
@@ -85,7 +118,7 @@ export const Playboard = ({player,setPlayer,playerChoice}) => {
           <div className="statement"><span>Do you want to quit ?</span></div>
           <div className="button">           
             <button className='playAgain' onClick={()=>{playAgain()}} >PLAY AGAIN</button>
-            <button className='quit'>QUIT</button>
+            <button className='quit' onClick={()=>{quite()}} >QUIT</button>
           </div>
         </div>
       </div>:null}
@@ -94,7 +127,7 @@ export const Playboard = ({player,setPlayer,playerChoice}) => {
           <div className="statement"><span>The Match is Tie <br /> Try Again?</span></div>
           <div className="button">           
             <button className='playAgain' onClick={()=>{playAgain()}} >PLAY AGAIN</button>
-            <button className='quit'>QUIT</button>
+            <button className='quit' onClick={()=>{quite()}} >QUIT</button>
           </div>
         </div>
       </div>:null}
@@ -133,7 +166,7 @@ export const Playboard = ({player,setPlayer,playerChoice}) => {
           </svg>}
           <span>TAKED THE ROUND</span></div>
           <div className="button">
-            <button className='quit'>QUIT</button>
+            <button className='quit' onClick={()=>{quite()}} >QUIT</button>
             <button className='playAgain'onClick={()=>{playAgain()}}  >NEXT ROUND</button>
           </div>
         </div>
@@ -170,7 +203,7 @@ export const Playboard = ({player,setPlayer,playerChoice}) => {
             />
           </svg>}<span>TAKED THE ROUND</span></div>
           <div className="button">
-            <button className='quit'>QUIT</button>
+            <button className='quit' onClick={()=>{quite()}} >QUIT</button>
             <button className='playAgain'onClick={()=>{playAgain()}}  >NEXT ROUND</button>
           </div>
         </div>
@@ -202,7 +235,7 @@ function Square({value,onsquareClicked}){
 
 
 
-function Board({player,setPlayer,squareSign,setsquareSign,squares,setsquares,setRefresh,isRefresh,disabled,setDisabled,setWinner,setTie}){
+function Board({player,setPlayer,squareSign,setsquareSign,squares,setsquares,setRefresh,isRefresh,disabled,setDisabled,setWinner,setTie,score,setScore}){
 
   const [playerChoice]=useState(player)
   const [pcChoice]=useState(player=="X"?"O":"X")
@@ -213,7 +246,6 @@ function Board({player,setPlayer,squareSign,setsquareSign,squares,setsquares,set
     if(squares[i]===null){
     if (calculateWiner(squares)) {
       let gameWinner= calculateWiner(squares);
-      console.log(gameWinner,' from userPlay')
       return;
 }else{
       if(playerChoice=="X"){
@@ -270,9 +302,6 @@ function Board({player,setPlayer,squareSign,setsquareSign,squares,setsquares,set
 
  function pcPlay(idy){
   if (calculateWiner(squares)) {
-    let gameWinner= calculateWiner(squares);
-    // gameWinner==="X"?setWinner("X"):setWinner("O")
-    console.log(gameWinner,' from pcPlay')
     return;
 }else{
   console.log(idy,"is index")
@@ -428,7 +457,12 @@ useEffect(()=>{
     //   return randomval;
     // 
   }else{
-      console.log('is null')
+      let tiematch = JSON.parse(localStorage.getItem("scores"))
+      tiematch.tie = tiematch.tie+1;
+      let value = JSON.stringify(tiematch);
+      localStorage.setItem("scores",value);
+      setScore(tiematch)
+      console.log(tiematch,'is null')
       return 9;
     }
   }
