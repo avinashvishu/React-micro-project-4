@@ -18,7 +18,9 @@ useEffect(()=>{
         // handle error
         console.log(error);
       })
-    },4000)},[])
+    },4000)
+    return () => clearInterval(interval);
+  },[])
     
 
     const MINUTE_MS = 30000;
